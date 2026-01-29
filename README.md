@@ -33,7 +33,7 @@ python ptof.py input.pptx  # CLI
 
 ![Example Slide](image/sample.png)
 
-<a href="samples/sample.pptx" download>
+<a href="sample/sample.pptx" download>
   📥 Sample pptx file (sample.pptx)
 </a>
 
