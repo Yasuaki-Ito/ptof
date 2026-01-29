@@ -1,0 +1,5 @@
+python-pptx
+pymupdf
+pywin32
+customtkinter
+tkinterdnd2
