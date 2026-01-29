@@ -23,7 +23,14 @@ dist/
 .DS_Store
 Thumbs.db
 
+# Claude
+CLAUDE.md
+
+# Git
+.gitignore
+
 # Project specific
 output_dir/
 test.pptx
 *.code-workspace
+build.bat

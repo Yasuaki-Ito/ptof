@@ -264,12 +264,14 @@ def convert_pptx_to_pdf(pptx_path, pdf_path, embed_fonts=False):
         pdf_path: Output PDF file path
         embed_fonts: True to force font embedding (PDF/A format)
     """
+    import pythoncom
     import win32com.client
 
     powerpoint = None
     presentation = None
 
     try:
+        pythoncom.CoInitialize()
         powerpoint = win32com.client.Dispatch("PowerPoint.Application")
 
         # Convert to absolute path
@@ -306,6 +308,7 @@ def convert_pptx_to_pdf(pptx_path, pdf_path, embed_fonts=False):
             presentation.Close()
         if powerpoint:
             powerpoint.Quit()
+        pythoncom.CoUninitialize()
 
 
 def clip_region(input_pdf_path, output_path, page_num, rect, slide_width, slide_height, dpi=300):
