@@ -76,3 +76,7 @@ ptof *.pptx --color red --dpi 600
 ## License
 
 BSD-3-Clause License
+
+## Additional Resources
+An article introducing PtoF in Japanese is available on Zenn:
+* https://zenn.dev/comp_lab/articles/347a9cef4ddc23
