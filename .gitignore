@@ -25,5 +25,5 @@ Thumbs.db
 
 # Project specific
 output_dir/
-*.pptx
+test.pptx
 
