@@ -28,8 +28,11 @@ python ptof.py input.pptx  # CLI
 
 ### 1. Prepare your PPTX
 
-1. Draw a cyan rectangle around the region you want to extract
+1. Draw a cyan rectangle around the region you want to extract. 
+    * The color can be changed via CLI/GUI options.
 2. Add a text box nearby with `filename=figure.pdf`
+    * The location of the text box is flexible; the closest one will be used.
+    * Supported formats: `.pdf`, `.png`, `.svg`
 
 ![Example Slide](image/sample.png)
 
