@@ -10,6 +10,8 @@ A tool for extracting figures (PDF/PNG/SVG) from PowerPoint slides.
 - PDF/PNG/SVG output formats
 - GUI and CLI versions
 
+![GUI version](image/gui.png)
+
 ## Installation
 
 ### Executable (Recommended)
