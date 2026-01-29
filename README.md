@@ -33,6 +33,8 @@ python ptof.py input.pptx  # CLI
 
 ![Example Slide](image/sample.png)
 
+Sample PPTX: [sample.pptx](sample/sample.pptx)
+
 ### 2. Convert
 
 **GUI**: Drag & drop files → Click Convert
