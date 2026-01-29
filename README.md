@@ -16,6 +16,8 @@ A tool for extracting figures (PDF/PNG/SVG) from PowerPoint slides.
 
 Download `PtoF.exe` (GUI) or `PtoF_CLI.exe` (CLI) from [Releases](https://github.com/Yasuaki-Ito/ptof/releases).
 
+> **Note**: On first launch, Windows SmartScreen may display a warning because the executable is not signed. Click "More info" → "Run anyway" to proceed.
+
 ### From Source
 
 ```bash
