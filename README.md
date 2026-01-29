@@ -1,6 +1,8 @@
 # PtoF - PPTX to Figures
-
 A tool for extracting figures (PDF/PNG/SVG) from PowerPoint slides.
+
+![Overview](image/overview.png)
+
 
 ## Features
 
