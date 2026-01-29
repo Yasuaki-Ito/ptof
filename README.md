@@ -33,7 +33,9 @@ python ptof.py input.pptx  # CLI
 
 ![Example Slide](image/sample.png)
 
-Sample PPTX: [sample.pptx](sample/sample.pptx)
+<a href="samples/sample.pptx" download>
+  📥 Sample pptx file (sample.pptx)
+</a>
 
 ### 2. Convert
 
