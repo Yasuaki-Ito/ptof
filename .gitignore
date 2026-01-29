@@ -26,4 +26,4 @@ Thumbs.db
 # Project specific
 output_dir/
 test.pptx
-
+*code-workspace
