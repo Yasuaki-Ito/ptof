@@ -216,7 +216,10 @@ def calc_distance(item1, item2):
 
 def match_rectangles_to_filenames(rectangles, filenames):
     """
-    Match rectangles to filename text boxes based on distance.
+    Match rectangles to filename text boxes using optimal assignment.
+
+    Uses the Hungarian algorithm to find the minimum-cost matching,
+    ensuring the globally optimal pairing based on distances.
 
     Args:
         rectangles: List of rectangle info
@@ -228,29 +231,23 @@ def match_rectangles_to_filenames(rectangles, filenames):
     if not rectangles or not filenames:
         return []
 
-    # Calculate distances for all pairs
-    pairs = []
+    from scipy.optimize import linear_sum_assignment
+
+    # Create cost matrix (distances between all pairs)
+    cost_matrix = []
     for rect in rectangles:
+        row = []
         for fn in filenames:
             dist = calc_distance(rect, fn)
-            pairs.append((dist, rect, fn))
+            row.append(dist)
+        cost_matrix.append(row)
 
-    # Sort by distance
-    pairs.sort(key=lambda x: x[0])
+    # Find optimal assignment using Hungarian algorithm
+    row_indices, col_indices = linear_sum_assignment(cost_matrix)
 
-    # Greedy matching (each rectangle and filename used only once)
-    matched = []
-    used_rects = set()
-    used_filenames = set()
-
-    for dist, rect, fn in pairs:
-        rect_id = id(rect)
-        fn_id = id(fn)
-
-        if rect_id not in used_rects and fn_id not in used_filenames:
-            matched.append((rect, fn))
-            used_rects.add(rect_id)
-            used_filenames.add(fn_id)
+    # Build matched pairs
+    matched = [(rectangles[i], filenames[j])
+               for i, j in zip(row_indices, col_indices)]
 
     return matched
 
