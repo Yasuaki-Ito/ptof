@@ -35,6 +35,7 @@ python ptof.py input.pptx  # CLI
 ## Usage
 
 ### 1. Prepare your PPTX
+* <a href="sample/sample.pptx" download>
 
 1. Draw a cyan rectangle around the region you want to extract. 
     * The color can be changed via CLI/GUI options.
@@ -44,7 +45,6 @@ python ptof.py input.pptx  # CLI
 
 ![Example Slide](image/sample.png)
 
-<a href="sample/sample.pptx" download>
   📥 Sample pptx file (sample.pptx)
 </a>
 
