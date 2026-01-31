@@ -1,10 +1,11 @@
+
+![PtoF](image/ptof.svg)
 # PtoF - PPTX to Figures
+
 A tool for extracting figures (PDF/PNG/SVG) from PowerPoint slides.
 
-![Overview](image/overview.png)
-
-
 ## Features
+![Overview](image/overview.png)
 
 - Automatically detects regions marked with cyan (or custom color) rectangles
 - Specify output filename with `filename=output.pdf`
