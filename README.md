@@ -11,6 +11,7 @@ A tool for extracting figures (PDF/PNG/SVG) from PowerPoint slides.
 - Specify output filename with `filename=output.pdf`
 - Multiple figures per slide supported (distance-based matching)
 - PDF/PNG/SVG output formats
+- Transparent PNG by default (slide background excluded)
 - GUI and CLI versions
 
 ![GUI version](image/gui.png)
@@ -69,6 +70,7 @@ ptof *.pptx --color red --dpi 600
 | `--dpi` | Resolution for PNG output (default: 300) |
 | `--margin` | Margin in points (positive: expand, negative: shrink) |
 | `--embed-fonts` | Force font embedding (PDF/A format) |
+| `--include-background` | Include slide background in output |
 | `--dry-run` | Show detected regions without converting |
 | `-n, --no-overwrite` | Confirm before overwriting |
 | `-q, --quiet` | Suppress output |
