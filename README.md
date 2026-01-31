@@ -83,4 +83,4 @@ BSD-3-Clause License
 
 ## Additional Resources
 An article introducing PtoF in Japanese is available on Zenn:
-* https://zenn.dev/comp_lab/articles/347a9cef4ddc23
+* [PowerPointで作った論文用の図を一発変換するWindowsアプリ「PtoF (PPTX to Figures)」](https://zenn.dev/comp_lab/articles/347a9cef4ddc23)
