@@ -347,10 +347,10 @@ def clip_region(input_pdf_path, output_path, page_num, rect, slide_width, slide_
     ext = output_path.lower().rsplit('.', 1)[-1]
 
     if ext == 'png':
-        # Output as PNG
+        # Output as PNG with transparent background
         zoom = dpi / 72  # 72 DPI is the baseline
         mat = fitz.Matrix(zoom, zoom)
-        pixmap = page.get_pixmap(matrix=mat, clip=clip_rect)
+        pixmap = page.get_pixmap(matrix=mat, clip=clip_rect, alpha=True)
         pixmap.save(output_path)
 
     elif ext == 'svg':
@@ -391,6 +391,18 @@ def remove_shape(shape):
     """
     sp = shape._element
     sp.getparent().remove(sp)
+
+
+def clear_slide_background(slide):
+    """
+    Clear slide background (set to no fill).
+
+    Args:
+        slide: python-pptx Slide object
+    """
+    background = slide.background
+    fill = background.fill
+    fill.background()  # Set to inherit (no explicit fill)
 
 
 def scan_pptx(pptx_path, marker_color=(0, 255, 255)):
@@ -480,7 +492,7 @@ def scan_pptx(pptx_path, marker_color=(0, 255, 255)):
 
 def process_pptx(pptx_path, output_dir, embed_fonts=False, marker_color=(0, 255, 255),
                  dpi=300, margin=0, dry_run=False, quiet=False, no_overwrite=False,
-                 progress_callback=None):
+                 progress_callback=None, include_background=False):
     """
     Process a PPTX file and output clipped PDFs.
 
@@ -496,6 +508,7 @@ def process_pptx(pptx_path, output_dir, embed_fonts=False, marker_color=(0, 255,
         no_overwrite: If True, confirm before overwriting existing files
         progress_callback: Progress callback function (message, current, total) -> bool
                           Returns False to cancel
+        include_background: If True, include slide background in output
 
     Returns:
         list: List of output files
@@ -562,6 +575,11 @@ def process_pptx(pptx_path, output_dir, embed_fonts=False, marker_color=(0, 255,
     # Remove marker rectangles and filename text boxes
     for shape in shapes_to_remove:
         remove_shape(shape)
+
+    # Clear slide backgrounds by default (unless include_background is True)
+    if not include_background:
+        for slide in prs.slides:
+            clear_slide_background(slide)
 
     # Create temporary PPTX and PDF files
     temp_dir = tempfile.mkdtemp()

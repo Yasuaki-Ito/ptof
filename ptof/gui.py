@@ -277,6 +277,14 @@ class App(CTkDnD):
         )
         self.embed_fonts_cb.pack(side="left", padx=(0, 20))
 
+        self.include_background_var = ctk.BooleanVar(value=False)
+        self.include_background_cb = ctk.CTkCheckBox(
+            checkbox_frame,
+            text="Include Slide Background",
+            variable=self.include_background_var
+        )
+        self.include_background_cb.pack(side="left", padx=(0, 20))
+
     def _create_action_section(self):
         frame = ctk.CTkFrame(self.main_frame, fg_color="transparent")
         frame.pack(fill="x", pady=(0, 10))
@@ -455,6 +463,7 @@ class App(CTkDnD):
         self.dpi_entry.configure(state=state)
         self.margin_entry.configure(state=state)
         self.embed_fonts_cb.configure(state=state)
+        self.include_background_cb.configure(state=state)
         self.dry_run_btn.configure(state=state)
         self.convert_btn.configure(state=state)
 
@@ -514,6 +523,7 @@ class App(CTkDnD):
             margin = float(self.margin_var.get())
             output_dir = self.output_var.get()
             embed_fonts = self.embed_fonts_var.get()
+            include_background = self.include_background_var.get()
 
             total_files = len(self.input_files)
             all_output_files = []
@@ -541,7 +551,8 @@ class App(CTkDnD):
                         dry_run,
                         quiet=True,
                         no_overwrite=False,
-                        progress_callback=progress_callback
+                        progress_callback=progress_callback,
+                        include_background=include_background
                     )
                     all_output_files.extend(output_files)
 

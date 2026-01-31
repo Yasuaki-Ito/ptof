@@ -64,6 +64,11 @@ def main():
         action='store_true',
         help='Suppress output'
     )
+    parser.add_argument(
+        '--include-background',
+        action='store_true',
+        help='Include slide background in output'
+    )
 
     args = parser.parse_args()
 
@@ -111,7 +116,8 @@ def main():
                 args.margin,
                 args.dry_run,
                 args.quiet,
-                args.no_overwrite
+                args.no_overwrite,
+                include_background=args.include_background
             )
             all_output_files.extend(output_files)
 
