@@ -303,8 +303,7 @@ def convert_pptx_to_pdf(pptx_path, pdf_path, embed_fonts=False):
     finally:
         if presentation:
             presentation.Close()
-        if powerpoint:
-            powerpoint.Quit()
+        # Don't quit PowerPoint - user may have other files open
         pythoncom.CoUninitialize()
 
 
@@ -356,12 +355,14 @@ def clip_region(input_pdf_path, output_path, page_num, rect, slide_width, slide_
     elif ext == 'svg':
         # Output as SVG (create a clipped PDF page first, then convert)
         temp_doc = fitz.open()
-        temp_page = temp_doc.new_page(width=clip_rect.width, height=clip_rect.height)
-        temp_page.show_pdf_page(temp_page.rect, doc, page_num, clip=clip_rect)
-        svg_content = temp_page.get_svg_image()
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(svg_content)
-        temp_doc.close()
+        try:
+            temp_page = temp_doc.new_page(width=clip_rect.width, height=clip_rect.height)
+            temp_page.show_pdf_page(temp_page.rect, doc, page_num, clip=clip_rect)
+            svg_content = temp_page.get_svg_image()
+            with open(output_path, 'w', encoding='utf-8') as f:
+                f.write(svg_content)
+        finally:
+            temp_doc.close()
 
     else:
         # Output as PDF
@@ -526,67 +527,72 @@ def process_pptx(pptx_path, output_dir, embed_fonts=False, marker_color=(0, 255,
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Scan
-    scan_result = scan_pptx(pptx_path, marker_color)
-    clip_info = scan_result['clip_info']
-    shapes_to_remove = scan_result['shapes_to_remove']
-    prs = scan_result['presentation']
-    slide_width = scan_result['slide_width']
-    slide_height = scan_result['slide_height']
-
-    if not clip_info:
-        log("No clipping regions found in the presentation")
-        return []
-
-    # Convert margin to EMU (1 point = 12700 EMU)
-    margin_emu = int(margin * 12700)
-
-    # Apply margin
-    for info in clip_info:
-        info['rect']['left'] -= margin_emu
-        info['rect']['top'] -= margin_emu
-        info['rect']['width'] += margin_emu * 2
-        info['rect']['height'] += margin_emu * 2
-
-    # In dry-run mode, show detection results and exit
-    if dry_run:
-        log(f"\n[Dry-run] {pptx_path.name}:")
-        for info in clip_info:
-            log(f"  Slide {info['slide_idx'] + 1} -> {info['filename']}")
-        return [output_dir / info['filename'] for info in clip_info]
-
-    # Check for existing files
-    if no_overwrite:
-        existing_files = []
-        for info in clip_info:
-            output_path = output_dir / info['filename']
-            if output_path.exists():
-                existing_files.append(output_path)
-
-        if existing_files:
-            print("The following files already exist:")
-            for f in existing_files:
-                print(f"  - {f}")
-            response = input("Overwrite? [y/N]: ").strip().lower()
-            if response != 'y':
-                print("Aborted.")
-                return []
-
-    # Remove marker rectangles and filename text boxes
-    for shape in shapes_to_remove:
-        remove_shape(shape)
-
-    # Clear slide backgrounds by default (unless include_background is True)
-    if not include_background:
-        for slide in prs.slides:
-            clear_slide_background(slide)
-
-    # Create temporary PPTX and PDF files
+    # Copy to temp to avoid conflicts with open PowerPoint
     temp_dir = tempfile.mkdtemp()
-    temp_pptx_path = os.path.join(temp_dir, 'temp.pptx')
-    temp_pdf_path = os.path.join(temp_dir, 'temp.pdf')
 
     try:
+        temp_source_path = os.path.join(temp_dir, pptx_path.name)
+        shutil.copy2(str(pptx_path), temp_source_path)
+
+        # Scan (using temp copy)
+        scan_result = scan_pptx(temp_source_path, marker_color)
+        clip_info = scan_result['clip_info']
+        shapes_to_remove = scan_result['shapes_to_remove']
+        prs = scan_result['presentation']
+        slide_width = scan_result['slide_width']
+        slide_height = scan_result['slide_height']
+
+        if not clip_info:
+            log("No clipping regions found in the presentation")
+            return []
+
+        # Convert margin to EMU (1 point = 12700 EMU)
+        margin_emu = int(margin * 12700)
+
+        # Apply margin
+        for info in clip_info:
+            info['rect']['left'] -= margin_emu
+            info['rect']['top'] -= margin_emu
+            info['rect']['width'] += margin_emu * 2
+            info['rect']['height'] += margin_emu * 2
+
+        # In dry-run mode, show detection results and exit
+        if dry_run:
+            log(f"\n[Dry-run] {pptx_path.name}:")
+            for info in clip_info:
+                log(f"  Slide {info['slide_idx'] + 1} -> {info['filename']}")
+            return [output_dir / info['filename'] for info in clip_info]
+
+        # Check for existing files
+        if no_overwrite:
+            existing_files = []
+            for info in clip_info:
+                output_path = output_dir / info['filename']
+                if output_path.exists():
+                    existing_files.append(output_path)
+
+            if existing_files:
+                print("The following files already exist:")
+                for f in existing_files:
+                    print(f"  - {f}")
+                response = input("Overwrite? [y/N]: ").strip().lower()
+                if response != 'y':
+                    print("Aborted.")
+                    return []
+
+        # Remove marker rectangles and filename text boxes
+        for shape in shapes_to_remove:
+            remove_shape(shape)
+
+        # Clear slide backgrounds by default (unless include_background is True)
+        if not include_background:
+            for slide in prs.slides:
+                clear_slide_background(slide)
+
+        # Temporary PPTX and PDF paths (using same temp_dir)
+        temp_pptx_path = os.path.join(temp_dir, 'temp.pptx')
+        temp_pdf_path = os.path.join(temp_dir, 'temp.pdf')
+
         # Save modified PPTX
         prs.save(temp_pptx_path)
 
