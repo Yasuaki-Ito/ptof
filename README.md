@@ -37,8 +37,8 @@ python ptof.py input.pptx  # CLI
 ## Usage
 
 ### 1. Prepare your PPTX
-<a href="sample/sample.pptx" download>
-  📥 Sample pptx file (sample.pptx)
+<a href="sample/sample.zip" download>
+  📥 Download sample PowerPoint file (ZIP)
 </a>
 
 1. Draw a cyan rectangle around the region you want to extract. 
