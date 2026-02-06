@@ -78,8 +78,9 @@ ptof *.pptx --color red --dpi 600
 
 ## Requirements
 
-- Windows + Microsoft PowerPoint
-- Python 3.8+
+* Windows with Microsoft PowerPoint installed
+* Python 3.8 or later (only required when running PtoF from source code; not required when using the executable)
+
 
 ## License
 
