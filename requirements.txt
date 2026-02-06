@@ -3,4 +3,4 @@ pymupdf
 pywin32
 customtkinter
 tkinterdnd2
-scipy
+munkres

@@ -13,6 +13,9 @@ build/
 dist/
 *.spec
 
+# Inno setup
+installer/
+
 # IDE
 .idea/
 .vscode/

@@ -231,7 +231,7 @@ def match_rectangles_to_filenames(rectangles, filenames):
     if not rectangles or not filenames:
         return []
 
-    from scipy.optimize import linear_sum_assignment
+    from munkres import Munkres
 
     # Create cost matrix (distances between all pairs)
     cost_matrix = []
@@ -243,11 +243,11 @@ def match_rectangles_to_filenames(rectangles, filenames):
         cost_matrix.append(row)
 
     # Find optimal assignment using Hungarian algorithm
-    row_indices, col_indices = linear_sum_assignment(cost_matrix)
+    m = Munkres()
+    indices = m.compute(cost_matrix)
 
     # Build matched pairs
-    matched = [(rectangles[i], filenames[j])
-               for i, j in zip(row_indices, col_indices)]
+    matched = [(rectangles[i], filenames[j]) for i, j in indices]
 
     return matched
 
