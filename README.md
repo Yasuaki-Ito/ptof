@@ -16,6 +16,12 @@ A tool for extracting figures (PDF/PNG/SVG) from PowerPoint slides.
 
 ![GUI version](image/gui.png)
 
+## Requirements
+
+* Windows with Microsoft PowerPoint installed
+* Python 3.8 or later (only required when running PtoF from source code; not required when using the executable)
+
+
 ## Installation
 > [!NOTE]
 > On first launch, Windows SmartScreen may display a warning. Click "More info" → "Run anyway" to proceed.
@@ -75,11 +81,6 @@ ptof *.pptx --color red --dpi 600
 | `--dry-run` | Show detected regions without converting |
 | `-n, --no-overwrite` | Confirm before overwriting |
 | `-q, --quiet` | Suppress output |
-
-## Requirements
-
-* Windows with Microsoft PowerPoint installed
-* Python 3.8 or later (only required when running PtoF from source code; not required when using the executable)
 
 
 ## License
